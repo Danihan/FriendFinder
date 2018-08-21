@@ -1,56 +1,9 @@
-var mysql = require('mysql');
-var inquirer = require('inquirer');
 
-var connection = mysql.createConnection({
-	host: "localhost",
-	port: "3306",
-	user: "root",
-	password: "",
-	database: "bamazon"
-});
-
-var showProducts = function() {
-	connection.query('SELECT * FROM products', function (error, results) {
-    //beginPurchase(results);
-	});
-};
-
-
-connection.query("SELECT * FROM products", function (err, res) {
-    console.log("Please select a product:")
-    res.forEach(function(item) {
-        console.log('Item ID: ' + item.id + ' | Product Name: ' + item.productName + ' | Price: ' + item.price);
-    });
-
-	inquirer.prompt([{
-		name: "itemId",
-		type: "input",
-		message: "Please select a product!  Enter the ID of what you'd like.."
-	},
-	{
-		name: "qty",
-		type: "input",
-		message: "And what quantity would you like?"
-	}]).then(function (itemObject) {
-		connection.query('SELECT * FROM products where id=?', itemObject.itemId, function (err, res) {
-			console.log(res);
-			if (res.qty >= itemObject.qty) {
-				var total = res[0].price * itemObject.qty
-				console.log("Sucessful Order! \nThe total cost is $" + cost.toFixed(2) + "\nThx for ordering")
-				var newQty = res[0].StockQty - itemObject.qty
-				connection.query("UPDATE products SET ? WHERE ?", [{
-					StockQty: newQty},
-				{
-					ProductName: itemObject.id
-				}],
-
-					function (err, res) {
-					});
-			}
-			else {
-				console.log("Sorry, not enough in stock!")
-				showProducts()
-			}
-		})
-	})
-});
+var friends = [
+{ "name": "Danny Smith", "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRldWUiFijE6ciwNn0ODmnvqQFxJY8brJUK_dJnuNwfvdcyepK-Nw", "scores": ["3", "2", "1", "2", "2", "5", "5", "5", "1", "1"] },
+{ "name": "Ron Haney", "photo": "https://media.licdn.com/dms/image/C4E03AQEL_MMequyeuA/profile-displayphoto-shrink_200_200/0?e=1538006400&v=beta&t=4AN261iWQeq9IVicZqZ9PJvHOrEUlLR_00EczA25yNQ", "scores": ["2", "1", "2", "4", "4", "4", "3", "1", "5", "5"] },
+{ "name": "Goof Maloof", "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR1xznnrAEGprpnxm0NbVpdv-J7dXJIeWqemPiCZzGXLqIfbZs", "scores": ["3", "3", "5", "1", "3", "2", "1", "2", "3", "3"] },
+{ "name": "Derrick Gerrick", "photo": "https://media.licdn.com/dms/image/C4E03AQEM5vh44U9Z5w/profile-displayphoto-shrink_200_200/0?e=1539820800&v=beta&t=uDRwHPg6UZahidweAu-3Rmx_dJzV3I-1z9FTqI7BoeU", "scores": ["1", "4", "4", "2", "5", "4", "1", "1", "3", "5"] },
+{ "name": "Harry Peachy", "photo": "https://f4.bcbits.com/img/a0487364624_10.jpg", "scores": ["1", "5", "4", "2", "3", "1", "1", "2", "1", "1"] },
+{ "name": "Rosey Cheeks", "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNbPi5e7uFY36oEIvo311vg5PifTB1JqpQBK3ixYlHvP8-wZPd9g", "scores": ["4", "1", "1", "2", "1", "1", "4", "3", "5", "1"] }];
+module.exports = friends;
